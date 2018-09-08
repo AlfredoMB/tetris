@@ -10,4 +10,8 @@ public class TetrisStageConfig : ScriptableObject
     public int Gravity;
 
     public int LineConsumptionScoreValue;
+    public float InputHoldTime;
+
+    public bool EnableBlocksWithoutNeighborsBelowToFall;
+    public bool EnableUpdateStepBoundInput;
 }

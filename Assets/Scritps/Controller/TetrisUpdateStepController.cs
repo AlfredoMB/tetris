@@ -1,13 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-internal class TetrisUpdateStepController
+public class TetrisUpdateStepController
 {
-    private float _updateStepInterval;
+    private readonly TetrisStageConfig _stageConfig;
     private float _nextUpdate;
 
-    public TetrisUpdateStepController(float updateStepInterval)
+    public TetrisUpdateStepController(TetrisStageConfig stageConfig)
     {
-        _updateStepInterval = updateStepInterval;
+        _stageConfig = stageConfig;
         _nextUpdate = Time.time;
     }
 
@@ -17,7 +18,12 @@ internal class TetrisUpdateStepController
         {
             return false;
         }
-        _nextUpdate += _updateStepInterval;
+        _nextUpdate += _stageConfig.UpdateStepInterval;
         return true;
+    }
+
+    public void Reset()
+    {
+        _nextUpdate = Time.time;
     }
 }

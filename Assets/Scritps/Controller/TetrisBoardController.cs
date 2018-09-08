@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-public class TetrisBoardController
+﻿public class TetrisBoardController
 {
     private TetrisBoard _board;
-    private int _maxX;
-    private int _maxY;
+    private readonly int _maxX;
+    private readonly int _maxY;
 
     private TetrisBlockGroup _blockGroup;
 
@@ -156,5 +153,42 @@ public class TetrisBoardController
             }
         }
         return -newY;
+    }
+
+    /// <summary>
+    /// As by description:
+    /// "- All blocks without neighbors below must fall down into place"
+    /// </summary>
+    public bool FallBlocksWithoutNeighborsBelowIntoPlace()
+    {
+        bool didABlockFall = false;
+        bool isLineEmpty;
+        for (int i = 0; i < _maxY - 1; i++)
+        {
+            isLineEmpty = true;
+            for (int j = 0; j < _maxX; j++)
+            {
+                if (_board.TetrisBlocks[j, i] != null)
+                {
+                    isLineEmpty = false;
+                }
+                else if (_board.TetrisBlocks[j, i + 1] != null)
+                {
+                    SetBlockPosition(_board.TetrisBlocks[j, i + 1], j, i);
+                    didABlockFall = true;
+                }
+            }
+
+            if (isLineEmpty)
+            {
+                break;
+            }
+        }
+        return didABlockFall;
+    }
+
+    public void Reset()
+    {
+        _board.Reset();
     }
 }

@@ -3,6 +3,7 @@
 public class InputView : MonoBehaviour
 {
     private TetrisInputController _inputController;
+    private float _downHoldTime;
 
     public void SetTetrisInputController(TetrisInputController inputController)
     {
@@ -16,17 +17,29 @@ public class InputView : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
             _inputController.MoveLeft();
         }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.RightArrow))
         {
             _inputController.MoveRight();
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        else if (Input.GetKey(KeyCode.DownArrow))
         {
-            _inputController.MoveDown();
+            _downHoldTime += Time.deltaTime;
+            if (_downHoldTime < _inputController.InputHoldTime)
+            {
+                _inputController.MoveDown();
+            }
+            else
+            {
+                _inputController.MoveDownUntilBottom();
+            }
+        }
+        else if (Input.GetKeyUp(KeyCode.DownArrow))
+        {
+            _downHoldTime = 0;
         }
         else if (Input.GetKey(KeyCode.DownArrow))
         {
@@ -39,6 +52,10 @@ public class InputView : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.G))
         {
             _inputController.RotateCounterclockwise();
+        }
+        else if (Input.GetKeyDown(KeyCode.Return))
+        {
+            _inputController.RestartGame();
         }
     }
 }

@@ -1,4 +1,10 @@
-﻿public class TetrisInputController
+﻿/// <summary>
+/// As by description: 
+/// "- Match the controls to that of Tetris, click/holding down the Left/Right keys should only move the block once per update step
+/// - Clicking the Down key should shift the block down once per update step, holding down the key should speed up the downward movement of the block
+/// - Use [F] and [G] keys to rotate blocks by clockwise and counterclockwise orientation (match exactly with Tetris)"
+/// </summary>
+public class TetrisInputController
 {
     private enum EStepAction
     {
@@ -10,11 +16,18 @@
     }
 
     private EStepAction _nextAction;
-    private readonly TetrisBlockGroupController _blockGroupController;
 
-    public TetrisInputController(TetrisBlockGroupController blockGroupController)
+    private readonly TetrisGameController _gameController;
+    private readonly TetrisBlockGroupController _blockGroupController;
+    private readonly TetrisStageConfig _stageConfig;
+
+    public float InputHoldTime { get { return _stageConfig.InputHoldTime; } }
+
+    public TetrisInputController(TetrisGameController gameController, TetrisBlockGroupController blockGroupController, TetrisStageConfig stageConfig)
     {
+        _gameController = gameController;
         _blockGroupController = blockGroupController;
+        _stageConfig = stageConfig;
     }
 
     public void MoveLeft()
@@ -67,6 +80,16 @@
                 _blockGroupController.MoveDownUntilBottom();
                 break;
         }
+        Reset();
+    }
+
+    public void Reset()
+    {
         _nextAction = EStepAction.None;
+    }
+
+    public void RestartGame()
+    {
+        _gameController.Restart();
     }
 }

@@ -1,19 +1,19 @@
 ﻿public class TetrisGravityController
 {
-    private readonly int _gravity;
+    private TetrisStageConfig _stageConfig;
     private TetrisBoardController _boardController;
 
     public bool HitBottom { get; private set; }
 
-    public TetrisGravityController(int gravity, TetrisBoardController boardController)
+    public TetrisGravityController(TetrisStageConfig stageConfig, TetrisBoardController boardController)
     {
-        _gravity = gravity;
+        _stageConfig = stageConfig;
         _boardController = boardController;
     }
-    
+
     public void Update()
     {
         HitBottom = false;
-        HitBottom = !_boardController.MoveCurrentBlockGroup(0, _gravity);
+        HitBottom = !_boardController.MoveCurrentBlockGroup(0, _stageConfig.Gravity);
     }
 }

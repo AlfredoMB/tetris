@@ -43,4 +43,19 @@ public class TetrisBoard
             }
         }
     }
+
+    public void Reset()
+    {
+        int x = TetrisBlocks.GetLength(0);
+        int y = TetrisBlocks.GetLength(1);
+
+        for (int i = 0; i < y; i++)
+        {
+            for (int j = 0; j < x; j++)
+            {
+                // TODO: add pool recycle
+                TetrisBlocks[j, i] = null;
+            }
+        }
+    }
 }
