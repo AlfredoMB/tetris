@@ -27,6 +27,8 @@ public class InputView : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             _blockGroupController.MoveDown();
+
+            // TODO: hold to speed up
         }
         else if (Input.GetKeyDown(KeyCode.F))
         {
