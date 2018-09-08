@@ -1,11 +1,19 @@
-﻿public class TetrisBoardController
+﻿using System;
+using System.Collections.Generic;
+
+public class TetrisBoardController
 {
     private TetrisBoard _board;
+    private int _maxX;
+    private int _maxY;
+
     private TetrisBlockGroup _blockGroup;
 
     public TetrisBoardController(TetrisBoard board)
     {
         _board = board;
+        _maxX = board.TetrisBlocks.GetLength(0);
+        _maxY = board.TetrisBlocks.GetLength(1);
     }
 
     public void SetCurrentBlockGroup(TetrisBlockGroup blockGroup)
@@ -68,7 +76,7 @@
     public bool MoveCurrentBlockGroup(int deltaX, int deltaY)
     {
         // if there are positions available for all,
-        if (!IsPositionAvailable(_blockGroup.Pivot.PositionX + deltaX,_blockGroup.Pivot.PositionY + deltaY))
+        if (!IsPositionAvailable(_blockGroup.Pivot.PositionX + deltaX, _blockGroup.Pivot.PositionY + deltaY))
         {
             return false;
         }
@@ -110,5 +118,81 @@
 
         var currentBlock = _board.TetrisBlocks[newX, newY];
         return currentBlock == null || _blockGroup.Contains(currentBlock);
-    }    
+    }
+
+    public void CheckFullLines(ref List<int> result)
+    {
+        result.Clear();
+        bool isLineFull;
+        for (int i = 0; i < _maxY; i++)
+        {
+            isLineFull = true;
+            for (int j = 0; j < _maxX; j++)
+            {
+                if (_board.TetrisBlocks[j, i] == null)
+                {
+                    isLineFull = false;
+                    break;
+                }
+            }
+
+            if (isLineFull)
+            {
+                result.Add(i);
+            }
+        }
+    }
+
+    public void ConsumeFullLines()
+    {
+        bool isLineFull;
+        int newY = 0;
+        for (int i = 0; i < _maxY; i++)
+        {
+            isLineFull = true;
+            for (int j = 0; j < _maxX; j++)
+            {
+                if (_board.TetrisBlocks[j, i] == null)
+                {
+                    isLineFull = false;
+                    break;
+                }
+                if (newY < 0)
+                {
+                    SetBlockPosition(_board.TetrisBlocks[j, i], j, i + newY);
+                }
+            }
+
+            if (isLineFull)
+            {
+                newY--;
+            }
+        }
+    }
+
+    public void ConsumeLines(List<int> _lineCheckList)
+    {
+        foreach(int i in _lineCheckList)
+        {
+            for (int j = 0; j < _maxX; j++)
+            {
+                if (_board.TetrisBlocks[j, i] != null)
+                {
+                    // TODO: add pool control
+                    _board.TetrisBlocks[j, i] = null;
+                }
+            }
+        }
+    }
+
+    public void UpdateBoard()
+    {
+        for (int i = 0; i < _maxY; i++)
+        {
+            for (int j = 0; j < _maxX; j++)
+            {
+
+            }
+        }
+    }
 }
