@@ -6,29 +6,33 @@ public class TetrisGameController : MonoBehaviour
     public AbstractBoardView BoardView;
     public AbstractScoreView ScoreView;
 
-    public TetrisStageConfig BoardSize;
+    public TetrisStageConfig StageConfig;
     public TetrisBlockGroup BlockGroup;
     
     private TetrisBoard _board;
     private TetrisBoardController _boardController;
     private TetrisBlockGroupController _blockGroupController;
     private TetrisBlockGroupSpawner _spawner;
+    private TetrisUpdateStepController _updateStepController;
+    private TetrisInputController _inputController;
     private TetrisGravityController _gravity;
     private TetrisScore _score;
     private TetrisScoreController _scoreController;
 
     private void Awake()
     {
-        _board = new TetrisBoard(BoardSize.BoardSizeX, BoardSize.BoardSizeY);
+        _board = new TetrisBoard(StageConfig.BoardSizeX, StageConfig.BoardSizeY);
         _boardController = new TetrisBoardController(_board);
         _blockGroupController = new TetrisBlockGroupController(_boardController);
         _spawner = new TetrisBlockGroupSpawner(_board, _boardController);
-        _gravity = new TetrisGravityController(BoardSize.Gravity, BoardSize.GravityUpdateInterval, _boardController);
+        _updateStepController = new TetrisUpdateStepController(StageConfig.UpdateStepInterval);
+        _inputController = new TetrisInputController(_blockGroupController);
+        _gravity = new TetrisGravityController(StageConfig.Gravity, _boardController);
 
         _score = new TetrisScore();
-        _scoreController = new TetrisScoreController(BoardSize.LineConsumptionScoreValue, _score);
+        _scoreController = new TetrisScoreController(StageConfig.LineConsumptionScoreValue, _score);
                 
-        InputView.SetTetrisBlockGroupController(_blockGroupController);
+        InputView.SetTetrisInputController(_inputController);
         BoardView.SetBoard(_board);
         ScoreView.SetScore(_score);
     }
@@ -40,19 +44,29 @@ public class TetrisGameController : MonoBehaviour
 
     private void Update()
     {
+        if (!_updateStepController.ShouldUpdate())
+        {
+            return;
+        }
+        _inputController.Update();
         _gravity.Update();
         if (!_gravity.HitBottom)
         {
             return;
         }
 
-        _spawner.Spawn(BlockGroup);
-
-        int linesConsumed = _boardController.ConsumeFullLines();
-
-        if (linesConsumed > 0)
+        if (_spawner.Spawn(BlockGroup))
         {
-            _scoreController.AddScore(linesConsumed);
+            int linesConsumed = _boardController.ConsumeFullLines();
+
+            if (linesConsumed > 0)
+            {
+                _scoreController.AddScore(linesConsumed);
+            }
+        }
+        else
+        {
+            Debug.Log("GameOver");
         }
     }
 }

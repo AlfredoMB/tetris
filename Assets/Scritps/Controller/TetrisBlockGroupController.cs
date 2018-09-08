@@ -1,4 +1,6 @@
-﻿public class TetrisBlockGroupController
+﻿using System;
+
+public class TetrisBlockGroupController
 {
     private TetrisBoardController _boardController;
 
@@ -30,5 +32,11 @@
     public void RotateCounterclockwise()
     {
         _boardController.RotateCurrentBlockGroup(false);
+    }
+
+    public void MoveDownUntilBottom()
+    {
+        while(_boardController.MoveCurrentBlockGroup(0, -1))
+        { }
     }
 }

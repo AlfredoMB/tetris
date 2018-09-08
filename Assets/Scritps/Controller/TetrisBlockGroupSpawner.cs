@@ -28,8 +28,6 @@ public class TetrisBlockGroupSpawner
         {
             return true;
         }
-
-        Debug.Log("GameOver");
         return false;
     }
 }

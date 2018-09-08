@@ -2,41 +2,43 @@
 
 public class InputView : MonoBehaviour
 {
-    private TetrisBlockGroupController _blockGroupController;
+    private TetrisInputController _inputController;
 
-    public void SetTetrisBlockGroupController(TetrisBlockGroupController boardController)
+    public void SetTetrisInputController(TetrisInputController inputController)
     {
-        _blockGroupController = boardController;
+        _inputController = inputController;
     }
 
     private void Update()
     {
-        if (_blockGroupController == null)
+        if (_inputController == null)
         {
             return;
         }
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            _blockGroupController.MoveLeft();
+            _inputController.MoveLeft();
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            _blockGroupController.MoveRight();
+            _inputController.MoveRight();
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            _blockGroupController.MoveDown();
-
-            // TODO: hold to speed up
+            _inputController.MoveDown();
+        }
+        else if (Input.GetKey(KeyCode.DownArrow))
+        {
+            _inputController.MoveDownUntilBottom();
         }
         else if (Input.GetKeyDown(KeyCode.F))
         {
-            _blockGroupController.RotateClockwise();
+            _inputController.RotateClockwise();
         }
         else if (Input.GetKeyDown(KeyCode.G))
         {
-            _blockGroupController.RotateCounterclockwise();
+            _inputController.RotateCounterclockwise();
         }
     }
 }
