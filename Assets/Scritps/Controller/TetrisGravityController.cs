@@ -3,7 +3,7 @@
     private TetrisStageConfig _stageConfig;
     private TetrisBoardController _boardController;
 
-    public bool HitBottom { get; private set; }
+    public bool DidCurrentBlockGroupHitBottom { get; private set; }
 
     public TetrisGravityController(TetrisStageConfig stageConfig, TetrisBoardController boardController)
     {
@@ -13,7 +13,6 @@
 
     public void Update()
     {
-        HitBottom = false;
-        HitBottom = !_boardController.MoveCurrentBlockGroup(0, _stageConfig.Gravity);
+        DidCurrentBlockGroupHitBottom = !_boardController.MoveCurrentBlockGroup(0, _stageConfig.Gravity);
     }
 }

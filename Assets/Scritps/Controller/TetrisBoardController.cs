@@ -4,7 +4,7 @@
     private readonly int _maxX;
     private readonly int _maxY;
 
-    private TetrisBlockGroup _blockGroup;
+    private TetrisBlockGroup _currentBlockGroup;
 
     public TetrisBoardController(TetrisBoard board)
     {
@@ -15,14 +15,14 @@
 
     public void SetCurrentBlockGroup(TetrisBlockGroup blockGroup)
     {
-        _blockGroup = blockGroup;
+        _currentBlockGroup = blockGroup;
     }
 
     public bool RotateCurrentBlockGroup(bool clockWise)
     {
-        int centerX = _blockGroup.Pivot.PositionX;
-        int centerY = _blockGroup.Pivot.PositionY;
-        var blocks = _blockGroup.RelativeBlocks;
+        int centerX = _currentBlockGroup.Pivot.PositionX;
+        int centerY = _currentBlockGroup.Pivot.PositionY;
+        var blocks = _currentBlockGroup.RelativeBlocks;
 
         int deltaX, deltaY, newX, newY;
         TetrisBlock block;
@@ -72,12 +72,17 @@
 
     public bool MoveCurrentBlockGroup(int deltaX, int deltaY)
     {
-        // if there are positions available for all,
-        if (!IsPositionAvailable(_blockGroup.Pivot.PositionX + deltaX, _blockGroup.Pivot.PositionY + deltaY))
+        if (_currentBlockGroup == null)
         {
             return false;
         }
-        foreach (TetrisBlock block in _blockGroup.RelativeBlocks)
+
+        // if there are positions available for all,
+        if (!IsPositionAvailable(_currentBlockGroup.Pivot.PositionX + deltaX, _currentBlockGroup.Pivot.PositionY + deltaY))
+        {
+            return false;
+        }
+        foreach (TetrisBlock block in _currentBlockGroup.RelativeBlocks)
         {
             if (!IsPositionAvailable(block.PositionX + deltaX, block.PositionY + deltaY))
             {
@@ -86,8 +91,8 @@
         }
 
         // move all
-        SetBlockPosition(_blockGroup.Pivot, _blockGroup.Pivot.PositionX + deltaX, _blockGroup.Pivot.PositionY + deltaY);
-        foreach (TetrisBlock block in _blockGroup.RelativeBlocks)
+        SetBlockPosition(_currentBlockGroup.Pivot, _currentBlockGroup.Pivot.PositionX + deltaX, _currentBlockGroup.Pivot.PositionY + deltaY);
+        foreach (TetrisBlock block in _currentBlockGroup.RelativeBlocks)
         {
             SetBlockPosition(block, block.PositionX + deltaX, block.PositionY + deltaY);
         }
@@ -124,7 +129,7 @@
         }
 
         var currentBlock = _board.TetrisBlocks[newX, newY];
-        return currentBlock == null || _blockGroup.Contains(currentBlock);
+        return currentBlock == null || _currentBlockGroup.Contains(currentBlock);
     }
 
     public int ConsumeFullLines()

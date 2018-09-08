@@ -14,4 +14,6 @@ public class TetrisStageConfig : ScriptableObject
 
     public bool EnableBlocksWithoutNeighborsBelowToFall;
     public bool EnableUpdateStepBoundInput;
+
+    public TetrisBlockGroup[] AvailableBlockGroups;
 }

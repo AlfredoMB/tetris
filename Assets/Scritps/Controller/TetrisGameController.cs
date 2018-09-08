@@ -8,7 +8,6 @@ public class TetrisGameController : MonoBehaviour
     public AbstractScoreView ScoreView;
 
     public TetrisStageConfig StageConfig;
-    public TetrisBlockGroup BlockGroup;
     
     private TetrisBoard _board;
     private TetrisBoardController _boardController;
@@ -29,7 +28,7 @@ public class TetrisGameController : MonoBehaviour
         _board = new TetrisBoard(StageConfig.BoardSizeX, StageConfig.BoardSizeY);
         _boardController = new TetrisBoardController(_board);
         _blockGroupController = new TetrisBlockGroupController(_boardController);
-        _spawner = new TetrisBlockGroupSpawner(_board, _boardController);
+        _spawner = new TetrisBlockGroupSpawner(_board, _boardController, StageConfig);
         _updateStepController = new TetrisUpdateStepController(StageConfig);
         _inputController = new TetrisInputController(this, _blockGroupController, StageConfig);
         _gravity = new TetrisGravityController(StageConfig, _boardController);
@@ -42,13 +41,9 @@ public class TetrisGameController : MonoBehaviour
         ScoreView.SetScore(_score);
     }
 
-    private void OnEnable()
-    {
-        _spawner.Spawn(BlockGroup);
-    }
-
     private void Update()
     {
+        // optional free input
         if (!StageConfig.EnableUpdateStepBoundInput)
         {
             _inputController.Update();
@@ -77,7 +72,7 @@ public class TetrisGameController : MonoBehaviour
 
         // physics
         _gravity.Update();
-        if (!_gravity.HitBottom)
+        if (!_gravity.DidCurrentBlockGroupHitBottom)
         {
             return;
         }
@@ -99,7 +94,7 @@ public class TetrisGameController : MonoBehaviour
         }
 
         // spawn new blockgroup
-        if (_spawner.Spawn(BlockGroup))
+        if (_spawner.Spawn())
         {
             _firstFrameSpawned = true;
         }
