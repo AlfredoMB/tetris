@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 
-public class Initializer : MonoBehaviour
+public class TetrisGameController : MonoBehaviour
 {
     public InputView InputView;
     public AbstractBoardView BoardView;
+    public AbstractScoreView ScoreView;
 
-    public TetrisBoardConfig BoardSize;
+    public TetrisStageConfig BoardSize;
     public TetrisBlockGroup BlockGroup;
     
     private TetrisBoard _board;
@@ -13,6 +14,8 @@ public class Initializer : MonoBehaviour
     private TetrisBlockGroupController _blockGroupController;
     private TetrisBlockGroupSpawner _spawner;
     private TetrisGravityController _gravity;
+    private TetrisScore _score;
+    private TetrisScoreController _scoreController;
 
     private void Awake()
     {
@@ -21,9 +24,13 @@ public class Initializer : MonoBehaviour
         _blockGroupController = new TetrisBlockGroupController(_boardController);
         _spawner = new TetrisBlockGroupSpawner(_board, _boardController);
         _gravity = new TetrisGravityController(BoardSize.Gravity, BoardSize.GravityUpdateInterval, _boardController);
+
+        _score = new TetrisScore();
+        _scoreController = new TetrisScoreController(BoardSize.LineConsumptionScoreValue, _score);
                 
         InputView.SetTetrisBlockGroupController(_blockGroupController);
         BoardView.SetBoard(_board);
+        ScoreView.SetScore(_score);
     }
 
     private void OnEnable()
@@ -41,6 +48,11 @@ public class Initializer : MonoBehaviour
 
         _spawner.Spawn(BlockGroup);
 
-        _boardController.ConsumeFullLines();
+        int linesConsumed = _boardController.ConsumeFullLines();
+
+        if (linesConsumed > 0)
+        {
+            _scoreController.AddScore(linesConsumed);
+        }
     }
 }

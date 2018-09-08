@@ -130,7 +130,7 @@ public class TetrisBoardController
         return currentBlock == null || _blockGroup.Contains(currentBlock);
     }
 
-    public void ConsumeFullLines()
+    public int ConsumeFullLines()
     {
         bool isLineFull;
         int newY = 0;
@@ -155,5 +155,6 @@ public class TetrisBoardController
                 newY--;
             }
         }
+        return -newY;
     }
 }
