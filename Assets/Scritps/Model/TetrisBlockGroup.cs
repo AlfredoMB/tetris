@@ -1,7 +1,7 @@
-﻿using System;
+﻿using UnityEngine;
 
-[Serializable]
-public class TetrisBlockGroup
+[CreateAssetMenu]
+public class TetrisBlockGroup : ScriptableObject
 {
     public TetrisBlock Pivot;
     public TetrisBlock[] RelativeBlocks;

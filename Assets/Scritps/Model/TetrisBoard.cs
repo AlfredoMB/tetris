@@ -1,7 +1,5 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
-[Serializable]
 public class TetrisBoard
 {
     public TetrisBlock[,] TetrisBlocks;
