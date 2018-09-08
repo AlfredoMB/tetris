@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Initializer : MonoBehaviour
 {
@@ -15,8 +14,6 @@ public class Initializer : MonoBehaviour
     private TetrisBlockGroupSpawner _spawner;
     private TetrisGravityController _gravity;
 
-    private List<int> _lineCheckList;
-
     private void Awake()
     {
         _board = new TetrisBoard(BoardSize.BoardSizeX, BoardSize.BoardSizeY);
@@ -24,9 +21,7 @@ public class Initializer : MonoBehaviour
         _blockGroupController = new TetrisBlockGroupController(_boardController);
         _spawner = new TetrisBlockGroupSpawner(_board, _boardController);
         _gravity = new TetrisGravityController(BoardSize.Gravity, BoardSize.GravityUpdateInterval, _boardController);
-
-        _lineCheckList = new List<int>(BoardSize.BoardSizeY);
-        
+                
         InputView.SetTetrisBlockGroupController(_blockGroupController);
         BoardView.SetBoard(_board);
     }
@@ -44,10 +39,8 @@ public class Initializer : MonoBehaviour
             return;
         }
 
-        _boardController.CheckFullLines(ref _lineCheckList);
-        if (_lineCheckList.Count > 0)
-        {
-            _boardController.ConsumeLines(_lineCheckList);
-        }
+        _spawner.Spawn(BlockGroup);
+
+        _boardController.ConsumeFullLines();
     }
 }

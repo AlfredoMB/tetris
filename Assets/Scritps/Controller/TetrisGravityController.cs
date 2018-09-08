@@ -20,6 +20,7 @@ public class TetrisGravityController
     {
         if (Time.time < _nextUpdate)
         {
+            HitBottom = false;
             return;
         }
         _nextUpdate = Time.time + _gravityUpdateInterval;

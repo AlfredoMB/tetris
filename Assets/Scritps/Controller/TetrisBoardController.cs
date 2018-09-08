@@ -100,10 +100,20 @@ public class TetrisBoardController
 
     public void SetBlockPosition(TetrisBlock block, int x, int y)
     {
+        // when emptying position
+        if (block == null)
+        {
+            _board.TetrisBlocks[x, y] = null;
+            return;
+        }
+
+        // remove from old position
         if (block.PositionX >= 0 && block.PositionY >= 0 && _board.TetrisBlocks[block.PositionX, block.PositionY] == block)
         {
             _board.TetrisBlocks[block.PositionX, block.PositionY] = null;
         }
+
+        // put on new position
         block.PositionX = x;
         block.PositionY = y;
         _board.TetrisBlocks[block.PositionX, block.PositionY] = block;
@@ -120,29 +130,6 @@ public class TetrisBoardController
         return currentBlock == null || _blockGroup.Contains(currentBlock);
     }
 
-    public void CheckFullLines(ref List<int> result)
-    {
-        result.Clear();
-        bool isLineFull;
-        for (int i = 0; i < _maxY; i++)
-        {
-            isLineFull = true;
-            for (int j = 0; j < _maxX; j++)
-            {
-                if (_board.TetrisBlocks[j, i] == null)
-                {
-                    isLineFull = false;
-                    break;
-                }
-            }
-
-            if (isLineFull)
-            {
-                result.Add(i);
-            }
-        }
-    }
-
     public void ConsumeFullLines()
     {
         bool isLineFull;
@@ -155,8 +142,8 @@ public class TetrisBoardController
                 if (_board.TetrisBlocks[j, i] == null)
                 {
                     isLineFull = false;
-                    break;
                 }
+
                 if (newY < 0)
                 {
                     SetBlockPosition(_board.TetrisBlocks[j, i], j, i + newY);
@@ -166,32 +153,6 @@ public class TetrisBoardController
             if (isLineFull)
             {
                 newY--;
-            }
-        }
-    }
-
-    public void ConsumeLines(List<int> _lineCheckList)
-    {
-        foreach(int i in _lineCheckList)
-        {
-            for (int j = 0; j < _maxX; j++)
-            {
-                if (_board.TetrisBlocks[j, i] != null)
-                {
-                    // TODO: add pool control
-                    _board.TetrisBlocks[j, i] = null;
-                }
-            }
-        }
-    }
-
-    public void UpdateBoard()
-    {
-        for (int i = 0; i < _maxY; i++)
-        {
-            for (int j = 0; j < _maxX; j++)
-            {
-
             }
         }
     }
