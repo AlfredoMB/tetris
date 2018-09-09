@@ -27,7 +27,7 @@ public class TetrisGameController : MonoBehaviour
         _blockGroupController = new TetrisBlockGroupController(_boardController);
         _spawner = new TetrisBlockGroupSpawnController(Board, _boardController, StageConfig);
         _updateStepController = new TetrisUpdateStepController(StageConfig);
-        InputController = new TetrisInputController(this, _blockGroupController, StageConfig);
+        InputController = new TetrisInputController(_blockGroupController, StageConfig);
         _gravity = new TetrisGravityController(StageConfig, _boardController);
 
         Score = new TetrisScore();

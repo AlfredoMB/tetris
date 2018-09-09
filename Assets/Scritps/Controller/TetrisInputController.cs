@@ -7,16 +7,14 @@
 /// </summary>
 public class TetrisInputController
 {
-    private readonly TetrisGameController _gameController;
     private readonly TetrisBlockGroupController _blockGroupController;
     private readonly TetrisStageConfig _stageConfig;
     private bool _canInput;
 
     public float InputHoldTime { get { return _stageConfig.InputHoldTime; } }
 
-    public TetrisInputController(TetrisGameController gameController, TetrisBlockGroupController blockGroupController, TetrisStageConfig stageConfig)
+    public TetrisInputController(TetrisBlockGroupController blockGroupController, TetrisStageConfig stageConfig)
     {
-        _gameController = gameController;
         _blockGroupController = blockGroupController;
         _stageConfig = stageConfig;
     }
@@ -84,10 +82,5 @@ public class TetrisInputController
     public void Reload()
     {
         _canInput = true;
-    }
-
-    public void RestartGame()
-    {
-        _gameController.Restart();
     }
 }

@@ -47,9 +47,5 @@ public class InputView : AbstractView
         {
             GameController.InputController.RotateCounterclockwise();
         }
-        else if (Input.GetKeyDown(KeyCode.Return))
-        {
-            GameController.InputController.RestartGame();
-        }
     }
 }
