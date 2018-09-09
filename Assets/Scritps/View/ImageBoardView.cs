@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class UnityBoardView : AbstractView
+public class ImageBoardView : AbstractView
 {
     public Sprite[] Sprites;
 
@@ -38,11 +38,21 @@ public class UnityBoardView : AbstractView
             BuildBoardView(GameController.Board);
         }
 
+        TetrisBlock block;
         for (int i = 0; i < _maxY; i++)
         {
             for (int j = 0; j < _maxX; j++)
             {
-                _blockViews[j, i].enabled = (GameController.Board.TetrisBlocks[j, i] != null);
+                block = GameController.Board.TetrisBlocks[j, i];
+                if (block != null)
+                {
+                    _blockViews[j, i].enabled = true;
+                    _blockViews[j, i].sprite = Sprites[(int)block.BlockType];
+                }
+                else
+                {
+                    _blockViews[j, i].enabled = false;
+                }
             }
         }
     }

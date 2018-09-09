@@ -6,11 +6,10 @@ public class TetrisGameController : MonoBehaviour
 
     private TetrisBoardController _boardController;
     private TetrisBlockGroupController _blockGroupController;
-    private TetrisBlockGroupSpawner _spawner;
+    private TetrisBlockGroupSpawnController _spawner;
     private TetrisUpdateStepController _updateStepController;
     private TetrisGravityController _gravity;
     private TetrisScoreController _scoreController;
-    private bool _firstFrameSpawned;
 
     public TetrisBoard Board { get; private set; }
     public TetrisInputController InputController { get; private set; }
@@ -23,7 +22,7 @@ public class TetrisGameController : MonoBehaviour
         Board = new TetrisBoard(StageConfig.BoardSizeX, StageConfig.BoardSizeY);
         _boardController = new TetrisBoardController(Board);
         _blockGroupController = new TetrisBlockGroupController(_boardController);
-        _spawner = new TetrisBlockGroupSpawner(Board, _boardController, StageConfig);
+        _spawner = new TetrisBlockGroupSpawnController(Board, _boardController, StageConfig);
         _updateStepController = new TetrisUpdateStepController(StageConfig);
         InputController = new TetrisInputController(this, _blockGroupController, StageConfig);
         _gravity = new TetrisGravityController(StageConfig, _boardController);
@@ -69,7 +68,7 @@ public class TetrisGameController : MonoBehaviour
         // spawn new blockgroup
         if (_spawner.Spawn())
         {
-            _firstFrameSpawned = true;
+            return;
         }
         else
         {

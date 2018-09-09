@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
-public class TetrisBlockGroupSpawner
+public class TetrisBlockGroupSpawnController
 {
     private TetrisBoardController _boardController;
     private TetrisStageConfig _stageConfig;
     private readonly int _spawnX;
     private readonly int _spawnY;
 
-    public TetrisBlockGroupSpawner(TetrisBoard board, TetrisBoardController boardController, TetrisStageConfig stageConfig)
+    public TetrisBlockGroupSpawnController(TetrisBoard board, TetrisBoardController boardController, TetrisStageConfig stageConfig)
     {
         _spawnX = board.TetrisBlocks.GetLength(0) / 2;
         _spawnY = board.TetrisBlocks.GetLength(1);

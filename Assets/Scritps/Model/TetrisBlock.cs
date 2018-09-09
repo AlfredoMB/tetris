@@ -3,6 +3,8 @@
 [Serializable]
 public class TetrisBlock
 {
+    public TetrisBlockGroup.EBlockType BlockType;
+
     public int RelativePositionX;
     public int RelativePositionY;
 

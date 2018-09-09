@@ -3,6 +3,16 @@
 [CreateAssetMenu]
 public class TetrisBlockGroup : ScriptableObject
 {
+    public enum EBlockType
+    {
+        O,
+        I,
+        J,
+        L,
+        S,
+        Z,
+        T,
+    }
     public TetrisBlock Pivot;
     public TetrisBlock[] RelativeBlocks;
 
@@ -14,6 +24,7 @@ public class TetrisBlockGroup : ScriptableObject
             block = RelativeBlocks[i];
             block.PositionX = Pivot.PositionX + block.RelativePositionX;
             block.PositionY = Pivot.PositionY + block.RelativePositionY;
+            block.BlockType = Pivot.BlockType;
         }
     }
 
