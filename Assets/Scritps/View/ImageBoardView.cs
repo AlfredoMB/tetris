@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class ImageBoardView : AbstractView
 {
+    public GameObject Object;
+
     public Sprite[] Sprites;
 
     private TetrisBoard _board;
@@ -22,8 +24,10 @@ public class ImageBoardView : AbstractView
         {
             for (int j = 0; j < _maxX; j++)
             {
-                var newView = new GameObject("blockView_" + j + "_" + i).AddComponent<Image>();
-                newView.transform.SetParent(transform, false);
+                var newObject = Instantiate(Object, transform); // new GameObject("blockView_" + j + "_" + i).AddComponent<Image>();
+                //newView.transform.SetParent(transform, false);
+                newObject.SetActive(true);
+                var newView = newObject.GetComponentInChildren<Image>();
                 newView.sprite = Sprites[0];
                 newView.enabled = false;
                 _blockViews[j, i] = newView;
