@@ -6,15 +6,15 @@ public class GameOverView : AbstractView
 
     private void Start()
     {
-        GameController.OnGameOver += OnGameOver;
+        GameController.OnGameStateChanged += OnGameStateChanged;
     }
 
     private void OnDisable()
     {
-        GameController.OnGameOver -= OnGameOver;
+        GameController.OnGameStateChanged -= OnGameStateChanged;
     }
 
-    private void OnGameOver()
+    private void OnGameStateChanged()
     {
         Panel.SetActive(GameController.IsGameOver);
     }

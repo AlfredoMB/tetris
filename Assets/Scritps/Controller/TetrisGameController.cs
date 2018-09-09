@@ -4,7 +4,7 @@ using UnityEngine;
 public class TetrisGameController : MonoBehaviour
 {
     public TetrisStageConfig StageConfig;
-    public event Action OnGameOver;
+    public event Action OnGameStateChanged;
 
     private TetrisBoardController _boardController;
     private TetrisBlockGroupController _blockGroupController;
@@ -76,9 +76,9 @@ public class TetrisGameController : MonoBehaviour
         {
             IsGameOver = true;
             enabled = false;
-            if (OnGameOver != null)
+            if (OnGameStateChanged != null)
             {
-                OnGameOver();
+                OnGameStateChanged();
             }
         }
     }
@@ -95,5 +95,10 @@ public class TetrisGameController : MonoBehaviour
         _boardController.Reset();
         _scoreController.Reset();
         _updateStepController.Reset();
+
+        if (OnGameStateChanged != null)
+        {
+            OnGameStateChanged();
+        }
     }
 }
