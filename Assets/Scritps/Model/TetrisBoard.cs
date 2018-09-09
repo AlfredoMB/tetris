@@ -7,9 +7,12 @@ public class TetrisBoard
 
     public event Action OnBoardChanged;
 
+    private StringBuilder _sb;
+
     public TetrisBoard(int x, int y)
     {
         TetrisBlocks = new TetrisBlock[x, y];
+        _sb = new StringBuilder();
     }
 
     public void DispatchBoardChanged()
@@ -22,7 +25,10 @@ public class TetrisBoard
 
     public override string ToString()
     {
-        var sb = new StringBuilder();
+        // force clear
+        _sb.Length = 0;
+        _sb.Capacity = 0;
+
         int x = TetrisBlocks.GetLength(0);
         int y = TetrisBlocks.GetLength(1);
 
@@ -30,15 +36,15 @@ public class TetrisBoard
         {
             for (int j = 0; j < x; j++)
             {
-                sb.Append(TetrisBlocks[j, i] != null ? 1 : 0);
+                _sb.Append(TetrisBlocks[j, i] != null ? 1 : 0);
             }
 
             if (i > 0)
             {
-                sb.AppendLine();
+                _sb.AppendLine();
             }
         }
-        return sb.ToString();
+        return _sb.ToString();
     }
 
     public void CopyFrom(TetrisBoard board)

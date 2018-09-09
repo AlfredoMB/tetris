@@ -4,6 +4,7 @@ using UnityEngine;
 public class TetrisGameController : MonoBehaviour
 {
     public TetrisStageConfig StageConfig;
+
     public event Action OnGameStateChanged;
 
     private TetrisBoardController _boardController;
