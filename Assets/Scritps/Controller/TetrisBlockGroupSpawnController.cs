@@ -23,11 +23,13 @@ public class TetrisBlockGroupSpawnController
         instance.Initialize();
         _boardController.SetCurrentBlockGroup(instance);
 
+        // for pivots on the first line
         if (_boardController.MoveCurrentBlockGroup(_spawnX, _spawnY - 1))
         {
             return true;
         }
 
+        // for pivots on the second line
         if (_boardController.MoveCurrentBlockGroup(_spawnX, _spawnY - 2))
         {
             return true;
