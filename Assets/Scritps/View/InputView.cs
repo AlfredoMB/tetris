@@ -39,10 +39,6 @@ public class InputView : AbstractView
                 GameController.InputController.MoveDownUntilBottom();
             }
         }
-        else if (Input.GetKey(KeyCode.DownArrow))
-        {
-            GameController.InputController.MoveDownUntilBottom();
-        }
         else if (Input.GetKeyDown(KeyCode.F))
         {
             GameController.InputController.RotateClockwise();

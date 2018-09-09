@@ -34,12 +34,6 @@ public class TetrisGameController : MonoBehaviour
 
     private void Update()
     {
-        // optional free input
-        if (!StageConfig.EnableUpdateStepBoundInput)
-        {
-            InputController.Update();
-        }
-
         // update step control
         if (!_updateStepController.ShouldUpdate())
         {
@@ -47,19 +41,7 @@ public class TetrisGameController : MonoBehaviour
         }
 
         // input
-        if (StageConfig.EnableUpdateStepBoundInput)
-        {
-            // adding a frame to reset input and avoid late input moving the new group
-            if (_firstFrameSpawned)
-            {
-                InputController.Reset();
-                _firstFrameSpawned = false;
-            }
-            else
-            {
-                InputController.Update();
-            }
-        }
+        InputController.Reload();
 
         // physics
         _gravity.Update();

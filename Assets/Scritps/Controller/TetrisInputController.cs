@@ -1,4 +1,5 @@
-﻿/// <summary>
+﻿using System;
+/// <summary>
 /// As by description: 
 /// "- Match the controls to that of Tetris, click/holding down the Left/Right keys should only move the block once per update step
 /// - Clicking the Down key should shift the block down once per update step, holding down the key should speed up the downward movement of the block
@@ -6,20 +7,10 @@
 /// </summary>
 public class TetrisInputController
 {
-    private enum EStepAction
-    {
-        None,
-        MoveLeft,
-        MoveRight,
-        MoveDown,
-        MoveDownUntilBottom,
-    }
-
-    private EStepAction _nextAction;
-
     private readonly TetrisGameController _gameController;
     private readonly TetrisBlockGroupController _blockGroupController;
     private readonly TetrisStageConfig _stageConfig;
+    private bool _canInput;
 
     public float InputHoldTime { get { return _stageConfig.InputHoldTime; } }
 
@@ -32,60 +23,67 @@ public class TetrisInputController
 
     public void MoveLeft()
     {
-        _nextAction = EStepAction.MoveLeft;
+        if (!_canInput)
+        {
+            return;
+        }
+        _canInput = false;
+        _blockGroupController.MoveLeft();
     }
 
     public void MoveRight()
     {
-        _nextAction = EStepAction.MoveRight;
+        if (!_canInput)
+        {
+            return;
+        }
+        _canInput = false;
+        _blockGroupController.MoveRight();
     }
 
     public void MoveDown()
     {
-        _nextAction = EStepAction.MoveDown;
+        if (!_canInput)
+        {
+            return;
+        }
+        _canInput = false;
+        _blockGroupController.MoveDown();
     }
 
     public void MoveDownUntilBottom()
     {
-        _nextAction = EStepAction.MoveDownUntilBottom;
+        if (!_canInput)
+        {
+            return;
+        }
+        _canInput = false;
+        _blockGroupController.MoveDownUntilBottom();
     }
 
     public void RotateClockwise()
     {
+        if (!_canInput)
+        {
+            return;
+        }
+        _canInput = false;
         _blockGroupController.RotateClockwise();
     }
 
     public void RotateCounterclockwise()
     {
+        if (!_canInput)
+        {
+            return;
+        }
+        _canInput = false;
         _blockGroupController.RotateCounterclockwise();
     }
 
-    public void Update()
+    public void Reload()
     {
-        switch (_nextAction)
-        {
-            case EStepAction.MoveLeft:
-                _blockGroupController.MoveLeft();
-                break;
-
-            case EStepAction.MoveRight:
-                _blockGroupController.MoveRight();
-                break;
-
-            case EStepAction.MoveDown:
-                _blockGroupController.MoveDown();
-                break;
-
-            case EStepAction.MoveDownUntilBottom:
-                _blockGroupController.MoveDownUntilBottom();
-                break;
-        }
-        Reset();
-    }
-
-    public void Reset()
-    {
-        _nextAction = EStepAction.None;
+        _canInput = true;
     }
 
     public void RestartGame()

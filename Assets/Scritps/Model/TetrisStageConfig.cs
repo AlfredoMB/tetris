@@ -13,7 +13,6 @@ public class TetrisStageConfig : ScriptableObject
     public float InputHoldTime;
 
     public bool EnableBlocksWithoutNeighborsBelowToFall;
-    public bool EnableUpdateStepBoundInput;
 
     public TetrisBlockGroup[] AvailableBlockGroups;
 }
