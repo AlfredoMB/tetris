@@ -20,6 +20,11 @@
 
     public bool RotateCurrentBlockGroup(bool clockWise)
     {
+        if (_currentBlockGroup == null)
+        {
+            return false;
+        }
+
         int centerX = _currentBlockGroup.Pivot.PositionX;
         int centerY = _currentBlockGroup.Pivot.PositionY;
         var blocks = _currentBlockGroup.RelativeBlocks;
@@ -106,19 +111,21 @@
         if (block == null)
         {
             _board.TetrisBlocks[x, y] = null;
-            return;
         }
-
-        // remove from old position
-        if (block.PositionX >= 0 && block.PositionY >= 0 && _board.TetrisBlocks[block.PositionX, block.PositionY] == block)
+        else
         {
-            _board.TetrisBlocks[block.PositionX, block.PositionY] = null;
-        }
+            // remove from old position
+            if (block.PositionX >= 0 && block.PositionY >= 0 && _board.TetrisBlocks[block.PositionX, block.PositionY] == block)
+            {
+                _board.TetrisBlocks[block.PositionX, block.PositionY] = null;
+            }
 
-        // put on new position
-        block.PositionX = x;
-        block.PositionY = y;
-        _board.TetrisBlocks[block.PositionX, block.PositionY] = block;
+            // put on new position
+            block.PositionX = x;
+            block.PositionY = y;
+            _board.TetrisBlocks[block.PositionX, block.PositionY] = block;
+        }
+        _board.DispatchBoardChanged();
     }
 
     private bool IsPositionAvailable(int newX, int newY)
@@ -128,8 +135,8 @@
             return false;
         }
 
-        var currentBlock = _board.TetrisBlocks[newX, newY];
-        return currentBlock == null || _currentBlockGroup.Contains(currentBlock);
+        var block = _board.TetrisBlocks[newX, newY];
+        return block == null || (_currentBlockGroup != null && _currentBlockGroup.Contains(block));
     }
 
     public int ConsumeFullLines()
@@ -195,5 +202,6 @@
     public void Reset()
     {
         _board.Reset();
+        _board.DispatchBoardChanged();
     }
 }

@@ -1,12 +1,23 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 public class TetrisBoard
 {
     public TetrisBlock[,] TetrisBlocks;
 
+    public event Action OnBoardChanged;
+
     public TetrisBoard(int x, int y)
     {
         TetrisBlocks = new TetrisBlock[x, y];
+    }
+
+    public void DispatchBoardChanged()
+    {
+        if (OnBoardChanged != null)
+        {
+            OnBoardChanged();
+        }
     }
 
     public override string ToString()

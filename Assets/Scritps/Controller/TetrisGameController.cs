@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class TetrisGameController : MonoBehaviour
 {
     public TetrisStageConfig StageConfig;
+    public event Action OnGameOver;
 
     private TetrisBoardController _boardController;
     private TetrisBlockGroupController _blockGroupController;
@@ -10,7 +12,7 @@ public class TetrisGameController : MonoBehaviour
     private TetrisUpdateStepController _updateStepController;
     private TetrisGravityController _gravity;
     private TetrisScoreController _scoreController;
-
+    
     public TetrisBoard Board { get; private set; }
     public TetrisInputController InputController { get; private set; }
     public TetrisScore Score { get; private set; }
@@ -74,7 +76,10 @@ public class TetrisGameController : MonoBehaviour
         {
             IsGameOver = true;
             enabled = false;
-            Debug.Log("GameOver");
+            if (OnGameOver != null)
+            {
+                OnGameOver();
+            }
         }
     }
 

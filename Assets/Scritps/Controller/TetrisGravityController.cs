@@ -14,5 +14,9 @@
     public void Update()
     {
         DidCurrentBlockGroupHitBottom = !_boardController.MoveCurrentBlockGroup(0, _stageConfig.Gravity);
+        if (DidCurrentBlockGroupHitBottom)
+        {
+            _boardController.SetCurrentBlockGroup(null);
+        }
     }
 }

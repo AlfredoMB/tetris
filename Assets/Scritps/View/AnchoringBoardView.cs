@@ -15,6 +15,17 @@ public class AnchoringBoardView : AbstractView
     private int _maxY;
 
     private Image[,] _blockViews;
+    private bool _shouldUpdateBoard;
+
+    private void Start()
+    {
+        GameController.Board.OnBoardChanged += OnBoardChanged;
+    }
+
+    private void OnDisable()
+    {
+        GameController.Board.OnBoardChanged -= OnBoardChanged;
+    }
 
     private void BuildBoardView(TetrisBoard board)
     {
@@ -50,7 +61,22 @@ public class AnchoringBoardView : AbstractView
         }
     }
 
-    private void Update()
+    private void OnBoardChanged()
+    {
+        _shouldUpdateBoard = true;
+    }
+
+    private void LateUpdate()
+    {
+        if (!_shouldUpdateBoard)
+        {
+            return;
+        }
+        _shouldUpdateBoard = false;
+        UpdateBoard();
+    }
+
+    private void UpdateBoard()
     {
         if (_blockViews == null)
         {
