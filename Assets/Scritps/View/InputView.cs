@@ -1,61 +1,59 @@
 ﻿using UnityEngine;
 
-public class InputView : MonoBehaviour
+public class InputView : AbstractView
 {
-    private TetrisInputController _inputController;
-    private float _downHoldTime;
-
-    public void SetTetrisInputController(TetrisInputController inputController)
-    {
-        _inputController = inputController;
-    }
+    private float _holdTime;
 
     private void Update()
     {
-        if (_inputController == null)
+        if (GameController.InputController == null)
         {
             return;
         }
 
+        if (Input.anyKey)
+        {
+            _holdTime += Time.deltaTime;
+        }
+        else
+        {
+            _holdTime = 0;
+        }
+
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            _inputController.MoveLeft();
+            GameController.InputController.MoveLeft();
         }
         else if (Input.GetKey(KeyCode.RightArrow))
         {
-            _inputController.MoveRight();
+            GameController.InputController.MoveRight();
         }
         else if (Input.GetKey(KeyCode.DownArrow))
         {
-            _downHoldTime += Time.deltaTime;
-            if (_downHoldTime < _inputController.InputHoldTime)
+            if (_holdTime < GameController.InputController.InputHoldTime)
             {
-                _inputController.MoveDown();
+                GameController.InputController.MoveDown();
             }
             else
             {
-                _inputController.MoveDownUntilBottom();
+                GameController.InputController.MoveDownUntilBottom();
             }
-        }
-        else if (Input.GetKeyUp(KeyCode.DownArrow))
-        {
-            _downHoldTime = 0;
         }
         else if (Input.GetKey(KeyCode.DownArrow))
         {
-            _inputController.MoveDownUntilBottom();
+            GameController.InputController.MoveDownUntilBottom();
         }
         else if (Input.GetKeyDown(KeyCode.F))
         {
-            _inputController.RotateClockwise();
+            GameController.InputController.RotateClockwise();
         }
         else if (Input.GetKeyDown(KeyCode.G))
         {
-            _inputController.RotateCounterclockwise();
+            GameController.InputController.RotateCounterclockwise();
         }
         else if (Input.GetKeyDown(KeyCode.Return))
         {
-            _inputController.RestartGame();
+            GameController.InputController.RestartGame();
         }
     }
 }

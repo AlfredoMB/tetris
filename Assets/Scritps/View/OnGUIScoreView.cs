@@ -1,21 +1,14 @@
 ﻿using UnityEditor;
 
-public class OnGUIScoreView : AbstractScoreView
+public class OnGUIScoreView : AbstractView
 {
-    private TetrisScore _score;
-
-    public override void SetScore(TetrisScore score)
-    {
-        _score = score;
-    }
-
     private void OnGUI()
     {
-        if (_score == null)
+        if (GameController.Score == null)
         {
             return;
         }
 
-        EditorGUILayout.TextArea(_score.ToString());
+        EditorGUILayout.TextArea(GameController.Score.ToString());
     }
 }

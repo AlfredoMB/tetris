@@ -1,44 +1,35 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TetrisGameController : MonoBehaviour
 {
-    public InputView InputView;
-    public AbstractBoardView BoardView;
-    public AbstractScoreView ScoreView;
-
     public TetrisStageConfig StageConfig;
-    
-    private TetrisBoard _board;
+
     private TetrisBoardController _boardController;
     private TetrisBlockGroupController _blockGroupController;
     private TetrisBlockGroupSpawner _spawner;
     private TetrisUpdateStepController _updateStepController;
-    private TetrisInputController _inputController;
     private TetrisGravityController _gravity;
-    private TetrisScore _score;
     private TetrisScoreController _scoreController;
     private bool _firstFrameSpawned;
 
+    public TetrisBoard Board { get; private set; }
+    public TetrisInputController InputController { get; private set; }
+    public TetrisScore Score { get; private set; }
     public bool IsGameOver { get; private set; }
 
     private void Awake()
     {
         IsGameOver = false;
-        _board = new TetrisBoard(StageConfig.BoardSizeX, StageConfig.BoardSizeY);
-        _boardController = new TetrisBoardController(_board);
+        Board = new TetrisBoard(StageConfig.BoardSizeX, StageConfig.BoardSizeY);
+        _boardController = new TetrisBoardController(Board);
         _blockGroupController = new TetrisBlockGroupController(_boardController);
-        _spawner = new TetrisBlockGroupSpawner(_board, _boardController, StageConfig);
+        _spawner = new TetrisBlockGroupSpawner(Board, _boardController, StageConfig);
         _updateStepController = new TetrisUpdateStepController(StageConfig);
-        _inputController = new TetrisInputController(this, _blockGroupController, StageConfig);
+        InputController = new TetrisInputController(this, _blockGroupController, StageConfig);
         _gravity = new TetrisGravityController(StageConfig, _boardController);
 
-        _score = new TetrisScore();
-        _scoreController = new TetrisScoreController(StageConfig, _score);
-                
-        InputView.SetTetrisInputController(_inputController);
-        BoardView.SetBoard(_board);
-        ScoreView.SetScore(_score);
+        Score = new TetrisScore();
+        _scoreController = new TetrisScoreController(StageConfig, Score);
     }
 
     private void Update()
@@ -46,7 +37,7 @@ public class TetrisGameController : MonoBehaviour
         // optional free input
         if (!StageConfig.EnableUpdateStepBoundInput)
         {
-            _inputController.Update();
+            InputController.Update();
         }
 
         // update step control
@@ -61,12 +52,12 @@ public class TetrisGameController : MonoBehaviour
             // adding a frame to reset input and avoid late input moving the new group
             if (_firstFrameSpawned)
             {
-                _inputController.Reset();
+                InputController.Reset();
                 _firstFrameSpawned = false;
             }
             else
             {
-                _inputController.Update();
+                InputController.Update();
             }
         }
 

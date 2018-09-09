@@ -1,21 +1,14 @@
 ﻿using UnityEditor;
 
-public class OnGUIBoardView : AbstractBoardView
-{
-    private TetrisBoard _board;
-
-    public override void SetBoard(TetrisBoard board)
-    {
-        _board = board;
-    }
-
+public class OnGUIBoardView : AbstractView
+{     
     private void OnGUI()
     {
-        if (_board == null)
+        if (GameController.Board == null)
         {
             return;
         }
 
-        EditorGUILayout.TextArea(_board.ToString());
+        EditorGUILayout.TextArea(GameController.Board.ToString());
     }
 }
