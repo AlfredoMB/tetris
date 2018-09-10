@@ -1,13 +1,16 @@
 ﻿using UnityEditor;
 
-public class OnGUIBoardView : AbstractView
+namespace AlfredoMB.Tetris.Views
 {
-    private void OnGUI()
+    public class OnGUIBoardView : AbstractView
     {
-        if (GameController.Board == null)
+        private void OnGUI()
         {
-            return;
+            if (GameController.Board == null)
+            {
+                return;
+            }
+            EditorGUILayout.TextArea(GameController.Board.ToString());
         }
-        EditorGUILayout.TextArea(GameController.Board.ToString());
     }
 }

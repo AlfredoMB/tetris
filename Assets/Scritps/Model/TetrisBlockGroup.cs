@@ -1,47 +1,50 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu]
-public class TetrisBlockGroup : ScriptableObject
+namespace AlfredoMB.Tetris.Models
 {
-    public enum EBlockType
+    [CreateAssetMenu]
+    public class TetrisBlockGroup : ScriptableObject
     {
-        O,
-        I,
-        J,
-        L,
-        S,
-        Z,
-        T,
-    }
-    public TetrisBlock Pivot;
-    public TetrisBlock[] RelativeBlocks;
-
-    public void Initialize()
-    {
-        TetrisBlock block;
-        for (int i = 0; i < RelativeBlocks.Length; i++)
+        public enum EBlockType
         {
-            block = RelativeBlocks[i];
-            block.PositionX = Pivot.PositionX + block.RelativePositionX;
-            block.PositionY = Pivot.PositionY + block.RelativePositionY;
-            block.BlockType = Pivot.BlockType;
+            O,
+            I,
+            J,
+            L,
+            S,
+            Z,
+            T,
         }
-    }
+        public TetrisBlock Pivot;
+        public TetrisBlock[] RelativeBlocks;
 
-    public bool Contains(TetrisBlock block)
-    {
-        if (Pivot == block)
+        public void Initialize()
         {
-            return true;
+            TetrisBlock block;
+            for (int i = 0; i < RelativeBlocks.Length; i++)
+            {
+                block = RelativeBlocks[i];
+                block.PositionX = Pivot.PositionX + block.RelativePositionX;
+                block.PositionY = Pivot.PositionY + block.RelativePositionY;
+                block.BlockType = Pivot.BlockType;
+            }
         }
 
-        for (int i = 0; i < RelativeBlocks.Length; i++)
+        public bool Contains(TetrisBlock block)
         {
-            if (RelativeBlocks[i] == block)
+            if (Pivot == block)
             {
                 return true;
             }
+
+            for (int i = 0; i < RelativeBlocks.Length; i++)
+            {
+                if (RelativeBlocks[i] == block)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
-        return false;
     }
 }

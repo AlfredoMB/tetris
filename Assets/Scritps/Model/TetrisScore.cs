@@ -1,15 +1,18 @@
-﻿public class TetrisScore
+﻿namespace AlfredoMB.Tetris.Models
 {
-    public int Score;
-    public int TotalLinesConsumed;
-
-    public override string ToString()
+    public class TetrisScore
     {
-        return Score.ToString();
-    }
+        public int Score;
+        public int TotalLinesConsumed;
 
-    public void Reset()
-    {
-        Score = 0;
+        public override string ToString()
+        {
+            return Score.ToString();
+        }
+
+        public void Reset()
+        {
+            Score = 0;
+        }
     }
 }

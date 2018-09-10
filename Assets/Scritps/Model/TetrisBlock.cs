@@ -1,13 +1,16 @@
 ﻿using System;
 
-[Serializable]
-public class TetrisBlock
+namespace AlfredoMB.Tetris.Models
 {
-    public TetrisBlockGroup.EBlockType BlockType;
+    [Serializable]
+    public class TetrisBlock
+    {
+        public TetrisBlockGroup.EBlockType BlockType;
 
-    public int RelativePositionX;
-    public int RelativePositionY;
+        public int RelativePositionX;
+        public int RelativePositionY;
 
-    public int PositionX;
-    public int PositionY;
+        public int PositionX;
+        public int PositionY;
+    }
 }

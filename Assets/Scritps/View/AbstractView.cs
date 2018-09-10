@@ -1,7 +1,11 @@
-﻿using UnityEngine;
+﻿using AlfredoMB.Tetris.Controllers;
+using UnityEngine;
 
-// Using abstract class instead of interface to take advantage of Unity Editor's referencing.
-public class AbstractView : MonoBehaviour
+namespace AlfredoMB.Tetris.Views
 {
-    public TetrisGameController GameController;
+    // Using abstract class instead of interface to take advantage of Unity Editor's referencing.
+    public class AbstractView : MonoBehaviour
+    {
+        public TetrisGameController GameController;
+    }
 }

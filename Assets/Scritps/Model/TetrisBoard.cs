@@ -1,77 +1,80 @@
 ﻿using System;
 using System.Text;
 
-public class TetrisBoard
+namespace AlfredoMB.Tetris.Models
 {
-    public TetrisBlock[,] TetrisBlocks;
-
-    public event Action OnBoardChanged;
-
-    private StringBuilder _sb;
-
-    public TetrisBoard(int x, int y)
+    public class TetrisBoard
     {
-        TetrisBlocks = new TetrisBlock[x, y];
-        _sb = new StringBuilder();
-    }
+        public TetrisBlock[,] TetrisBlocks;
 
-    public void DispatchBoardChanged()
-    {
-        if (OnBoardChanged != null)
+        public event Action OnBoardChanged;
+
+        private StringBuilder _sb;
+
+        public TetrisBoard(int x, int y)
         {
-            OnBoardChanged();
+            TetrisBlocks = new TetrisBlock[x, y];
+            _sb = new StringBuilder();
         }
-    }
 
-    public override string ToString()
-    {
-        // force clear
-        _sb.Length = 0;
-        _sb.Capacity = 0;
-
-        int x = TetrisBlocks.GetLength(0);
-        int y = TetrisBlocks.GetLength(1);
-
-        for (int i = y-1; i >= 0; i--)
+        public void DispatchBoardChanged()
         {
-            for (int j = 0; j < x; j++)
+            if (OnBoardChanged != null)
             {
-                _sb.Append(TetrisBlocks[j, i] != null ? 1 : 0);
-            }
-
-            if (i > 0)
-            {
-                _sb.AppendLine();
+                OnBoardChanged();
             }
         }
-        return _sb.ToString();
-    }
 
-    public void CopyFrom(TetrisBoard board)
-    {
-        int x = board.TetrisBlocks.GetLength(0);
-        int y = board.TetrisBlocks.GetLength(1);
-
-        for (int i = 0; i < y; i++)
+        public override string ToString()
         {
-            for (int j = 0; j < x; j++)
+            // force clear
+            _sb.Length = 0;
+            _sb.Capacity = 0;
+
+            int x = TetrisBlocks.GetLength(0);
+            int y = TetrisBlocks.GetLength(1);
+
+            for (int i = y - 1; i >= 0; i--)
             {
-                TetrisBlocks[j, i] = board.TetrisBlocks[j, i];
+                for (int j = 0; j < x; j++)
+                {
+                    _sb.Append(TetrisBlocks[j, i] != null ? 1 : 0);
+                }
+
+                if (i > 0)
+                {
+                    _sb.AppendLine();
+                }
+            }
+            return _sb.ToString();
+        }
+
+        public void CopyFrom(TetrisBoard board)
+        {
+            int x = board.TetrisBlocks.GetLength(0);
+            int y = board.TetrisBlocks.GetLength(1);
+
+            for (int i = 0; i < y; i++)
+            {
+                for (int j = 0; j < x; j++)
+                {
+                    TetrisBlocks[j, i] = board.TetrisBlocks[j, i];
+                }
             }
         }
-    }
 
-    public void Reset()
-    {
-        int x = TetrisBlocks.GetLength(0);
-        int y = TetrisBlocks.GetLength(1);
-
-        for (int i = 0; i < y; i++)
+        public void Reset()
         {
-            for (int j = 0; j < x; j++)
+            int x = TetrisBlocks.GetLength(0);
+            int y = TetrisBlocks.GetLength(1);
+
+            for (int i = 0; i < y; i++)
             {
-                // TODO: add pool recycle
-                TetrisBlocks[j, i] = null;
+                for (int j = 0; j < x; j++)
+                {
+                    // TODO: add pool recycle
+                    TetrisBlocks[j, i] = null;
+                }
             }
         }
     }

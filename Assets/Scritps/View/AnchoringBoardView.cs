@@ -1,102 +1,106 @@
-﻿using UnityEngine;
+﻿using AlfredoMB.Tetris.Models;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class AnchoringBoardView : AbstractView
+namespace AlfredoMB.Tetris.Views
 {
-    public GameObject Block;
-
-    public RectTransform Root;
-    public RectTransform HorizontalReference;
-    public RectTransform VerticalReference;
-
-    public Sprite[] Sprites;
-
-    private int _maxX;
-    private int _maxY;
-
-    private Image[,] _blockViews;
-    private bool _shouldUpdateBoard;
-
-    private void Start()
+    public class AnchoringBoardView : AbstractView
     {
-        GameController.Board.OnBoardChanged += OnBoardChanged;
-    }
+        public GameObject Block;
 
-    private void OnDisable()
-    {
-        GameController.Board.OnBoardChanged -= OnBoardChanged;
-    }
+        public RectTransform Root;
+        public RectTransform HorizontalReference;
+        public RectTransform VerticalReference;
 
-    private void BuildBoardView(TetrisBoard board)
-    {
-        _maxX = board.TetrisBlocks.GetLength(0);
-        _maxY = board.TetrisBlocks.GetLength(1);
+        public Sprite[] Sprites;
 
-        var anchorMinHorizontalDistance = HorizontalReference.anchorMin - Root.anchorMin;
-        var anchorMaxHorizontalDistance = HorizontalReference.anchorMax - Root.anchorMax;
+        private int _maxX;
+        private int _maxY;
 
-        var anchorMinVerticalDistance = VerticalReference.anchorMin - Root.anchorMin;
-        var anchorMaxVerticalDistance = VerticalReference.anchorMax - Root.anchorMax;
+        private Image[,] _blockViews;
+        private bool _shouldUpdateBoard;
 
-        _blockViews = new Image[_maxX, _maxY];
-
-        for (int i = 0; i < _maxY; i++)
+        private void Start()
         {
-            for (int j = 0; j < _maxX; j++)
+            GameController.Board.OnBoardChanged += OnBoardChanged;
+        }
+
+        private void OnDisable()
+        {
+            GameController.Board.OnBoardChanged -= OnBoardChanged;
+        }
+
+        private void BuildBoardView(TetrisBoard board)
+        {
+            _maxX = board.TetrisBlocks.GetLength(0);
+            _maxY = board.TetrisBlocks.GetLength(1);
+
+            var anchorMinHorizontalDistance = HorizontalReference.anchorMin - Root.anchorMin;
+            var anchorMaxHorizontalDistance = HorizontalReference.anchorMax - Root.anchorMax;
+
+            var anchorMinVerticalDistance = VerticalReference.anchorMin - Root.anchorMin;
+            var anchorMaxVerticalDistance = VerticalReference.anchorMax - Root.anchorMax;
+
+            _blockViews = new Image[_maxX, _maxY];
+
+            for (int i = 0; i < _maxY; i++)
             {
-                var newBlock = Instantiate(Block, transform);
-                newBlock.name = "block_" + j + "_" + i;
-                var rectTransform = newBlock.GetComponent<RectTransform>();
+                for (int j = 0; j < _maxX; j++)
+                {
+                    var newBlock = Instantiate(Block, transform);
+                    newBlock.name = "block_" + j + "_" + i;
+                    var rectTransform = newBlock.GetComponent<RectTransform>();
 
-                rectTransform.anchorMin = Root.anchorMin + anchorMinHorizontalDistance * j + anchorMinVerticalDistance * i;
-                rectTransform.anchorMax = Root.anchorMax + anchorMaxHorizontalDistance * j + anchorMaxVerticalDistance * i;
-                rectTransform.anchoredPosition = Vector2.zero;
+                    rectTransform.anchorMin = Root.anchorMin + anchorMinHorizontalDistance * j + anchorMinVerticalDistance * i;
+                    rectTransform.anchorMax = Root.anchorMax + anchorMaxHorizontalDistance * j + anchorMaxVerticalDistance * i;
+                    rectTransform.anchoredPosition = Vector2.zero;
 
-                newBlock.SetActive(true);
-                var newView = newBlock.GetComponent<Image>();
-                newView.sprite = null;
-                newView.enabled = false;
-                _blockViews[j, _maxY - i - 1] = newView;    // inverting just to avoid inverting the references
+                    newBlock.SetActive(true);
+                    var newView = newBlock.GetComponent<Image>();
+                    newView.sprite = null;
+                    newView.enabled = false;
+                    _blockViews[j, _maxY - i - 1] = newView;    // inverting just to avoid inverting the references
+                }
             }
         }
-    }
 
-    private void OnBoardChanged()
-    {
-        _shouldUpdateBoard = true;
-    }
-
-    private void LateUpdate()
-    {
-        if (!_shouldUpdateBoard)
+        private void OnBoardChanged()
         {
-            return;
-        }
-        _shouldUpdateBoard = false;
-        UpdateBoard();
-    }
-
-    private void UpdateBoard()
-    {
-        if (_blockViews == null)
-        {
-            BuildBoardView(GameController.Board);
+            _shouldUpdateBoard = true;
         }
 
-        TetrisBlock block;
-        for (int i = 0; i < _maxY; i++)
+        private void LateUpdate()
         {
-            for (int j = 0; j < _maxX; j++)
+            if (!_shouldUpdateBoard)
             {
-                block = GameController.Board.TetrisBlocks[j, i];
-                if (block != null)
+                return;
+            }
+            _shouldUpdateBoard = false;
+            UpdateBoard();
+        }
+
+        private void UpdateBoard()
+        {
+            if (_blockViews == null)
+            {
+                BuildBoardView(GameController.Board);
+            }
+
+            TetrisBlock block;
+            for (int i = 0; i < _maxY; i++)
+            {
+                for (int j = 0; j < _maxX; j++)
                 {
-                    _blockViews[j, i].enabled = true;
-                    _blockViews[j, i].sprite = Sprites[(int)block.BlockType];
-                }
-                else
-                {
-                    _blockViews[j, i].enabled = false;
+                    block = GameController.Board.TetrisBlocks[j, i];
+                    if (block != null)
+                    {
+                        _blockViews[j, i].enabled = true;
+                        _blockViews[j, i].sprite = Sprites[(int)block.BlockType];
+                    }
+                    else
+                    {
+                        _blockViews[j, i].enabled = false;
+                    }
                 }
             }
         }

@@ -1,105 +1,109 @@
-﻿using System;
+﻿using AlfredoMB.Tetris.Models;
+using System;
 using UnityEngine;
 
-public class TetrisGameController : MonoBehaviour
+namespace AlfredoMB.Tetris.Controllers
 {
-    public TetrisStageConfig StageConfig;
-
-    public event Action OnGameStateChanged;
-
-    private TetrisBoardController _boardController;
-    private TetrisBlockGroupController _blockGroupController;
-    private TetrisBlockGroupSpawnController _spawner;
-    private TetrisUpdateStepController _updateStepController;
-    private TetrisGravityController _gravity;
-    private TetrisScoreController _scoreController;
-    
-    public TetrisBoard Board { get; private set; }
-    public TetrisInputController InputController { get; private set; }
-    public TetrisScore Score { get; private set; }
-    public bool IsGameOver { get; private set; }
-
-    private void Awake()
+    public class TetrisGameController : MonoBehaviour
     {
-        IsGameOver = false;
-        Board = new TetrisBoard(StageConfig.BoardSizeX, StageConfig.BoardSizeY);
-        _boardController = new TetrisBoardController(Board);
-        _blockGroupController = new TetrisBlockGroupController(_boardController);
-        _spawner = new TetrisBlockGroupSpawnController(Board, _boardController, StageConfig);
-        _updateStepController = new TetrisUpdateStepController(StageConfig);
-        InputController = new TetrisInputController(_blockGroupController, StageConfig);
-        _gravity = new TetrisGravityController(StageConfig, _boardController);
+        public TetrisStageConfig StageConfig;
 
-        Score = new TetrisScore();
-        _scoreController = new TetrisScoreController(StageConfig, Score);
-    }
+        public event Action OnGameStateChanged;
 
-    private void Update()
-    {
-        // update step control
-        if (!_updateStepController.ShouldUpdate())
+        private TetrisBoardController _boardController;
+        private TetrisBlockGroupController _blockGroupController;
+        private TetrisBlockGroupSpawnController _spawner;
+        private TetrisUpdateStepController _updateStepController;
+        private TetrisGravityController _gravity;
+        private TetrisScoreController _scoreController;
+
+        public TetrisBoard Board { get; private set; }
+        public TetrisInputController InputController { get; private set; }
+        public TetrisScore Score { get; private set; }
+        public bool IsGameOver { get; private set; }
+
+        private void Awake()
         {
-            return;
+            IsGameOver = false;
+            Board = new TetrisBoard(StageConfig.BoardSizeX, StageConfig.BoardSizeY);
+            _boardController = new TetrisBoardController(Board);
+            _blockGroupController = new TetrisBlockGroupController(_boardController);
+            _spawner = new TetrisBlockGroupSpawnController(Board, _boardController, StageConfig);
+            _updateStepController = new TetrisUpdateStepController(StageConfig);
+            InputController = new TetrisInputController(_blockGroupController, StageConfig);
+            _gravity = new TetrisGravityController(StageConfig, _boardController);
+
+            Score = new TetrisScore();
+            _scoreController = new TetrisScoreController(StageConfig, Score);
         }
 
-        // input
-        InputController.Reload();
-
-        // physics
-        _gravity.Update();
-        if (!_gravity.DidCurrentBlockGroupHitBottom)
+        private void Update()
         {
-            return;
+            // update step control
+            if (!_updateStepController.ShouldUpdate())
+            {
+                return;
+            }
+
+            // input
+            InputController.Reload();
+
+            // physics
+            _gravity.Update();
+            if (!_gravity.DidCurrentBlockGroupHitBottom)
+            {
+                return;
+            }
+
+            // game logic
+            // consume lines
+            int linesConsumed = _boardController.ConsumeFullLines();
+            if (linesConsumed > 0)
+            {
+                _scoreController.AddLinesConsumed(linesConsumed);
+                return;
+            }
+
+            // fall flying blocks
+            if (StageConfig.EnableBlocksWithoutNeighborsBelowToFall
+                && _boardController.FallBlocksWithoutNeighborsBelowIntoPlace())
+            {
+                return;
+            }
+
+            // spawn new blockgroup
+            if (_spawner.Spawn())
+            {
+                return;
+            }
+            else
+            {
+                IsGameOver = true;
+                enabled = false;
+                if (OnGameStateChanged != null)
+                {
+                    OnGameStateChanged();
+                }
+            }
         }
 
-        // game logic
-        // consume lines
-        int linesConsumed = _boardController.ConsumeFullLines();
-        if (linesConsumed > 0)
+        public void Restart()
         {
-            _scoreController.AddLinesConsumed(linesConsumed);
-            return;
-        }
+            if (!IsGameOver)
+            {
+                return;
+            }
+            IsGameOver = false;
+            enabled = true;
 
-        // fall flying blocks
-        if (StageConfig.EnableBlocksWithoutNeighborsBelowToFall
-            && _boardController.FallBlocksWithoutNeighborsBelowIntoPlace())
-        {
-            return;
-        }
+            _boardController.Reset();
+            _scoreController.Reset();
+            _updateStepController.Reset();
 
-        // spawn new blockgroup
-        if (_spawner.Spawn())
-        {
-            return;
-        }
-        else
-        {
-            IsGameOver = true;
-            enabled = false;
             if (OnGameStateChanged != null)
             {
                 OnGameStateChanged();
             }
-        }
-    }
-
-    public void Restart()
-    {
-        if (!IsGameOver)
-        {
-            return;
-        }
-        IsGameOver = false;
-        enabled = true;
-
-        _boardController.Reset();
-        _scoreController.Reset();
-        _updateStepController.Reset();
-
-        if (OnGameStateChanged != null)
-        {
-            OnGameStateChanged();
         }
     }
 }

@@ -1,21 +1,24 @@
 ﻿using UnityEngine;
 
-public class GameOverView : AbstractView
+namespace AlfredoMB.Tetris.Views
 {
-    public GameObject Panel;
-
-    private void Start()
+    public class GameOverView : AbstractView
     {
-        GameController.OnGameStateChanged += OnGameStateChanged;
-    }
+        public GameObject Panel;
 
-    private void OnDisable()
-    {
-        GameController.OnGameStateChanged -= OnGameStateChanged;
-    }
+        private void Start()
+        {
+            GameController.OnGameStateChanged += OnGameStateChanged;
+        }
 
-    private void OnGameStateChanged()
-    {
-        Panel.SetActive(GameController.IsGameOver);
+        private void OnDisable()
+        {
+            GameController.OnGameStateChanged -= OnGameStateChanged;
+        }
+
+        private void OnGameStateChanged()
+        {
+            Panel.SetActive(GameController.IsGameOver);
+        }
     }
 }

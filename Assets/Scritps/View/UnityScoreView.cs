@@ -1,16 +1,19 @@
 ﻿using UnityEngine.UI;
 
-public class UnityScoreView : AbstractView
+namespace AlfredoMB.Tetris.Views
 {
-    public Text Text;
-
-    private void Update()
+    public class UnityScoreView : AbstractView
     {
-        if (GameController.Score == null)
-        {
-            return;
-        }
+        public Text Text;
 
-        Text.text = GameController.Score.Score.ToString();
+        private void Update()
+        {
+            if (GameController.Score == null)
+            {
+                return;
+            }
+
+            Text.text = GameController.Score.Score.ToString();
+        }
     }
 }

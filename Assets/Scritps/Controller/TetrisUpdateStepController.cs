@@ -1,28 +1,32 @@
-﻿using UnityEngine;
+﻿using AlfredoMB.Tetris.Models;
+using UnityEngine;
 
-public class TetrisUpdateStepController
+namespace AlfredoMB.Tetris.Controllers
 {
-    private readonly TetrisStageConfig _stageConfig;
-    private float _nextUpdate;
-
-    public TetrisUpdateStepController(TetrisStageConfig stageConfig)
+    public class TetrisUpdateStepController
     {
-        _stageConfig = stageConfig;
-        _nextUpdate = Time.time;
-    }
+        private readonly TetrisStageConfig _stageConfig;
+        private float _nextUpdate;
 
-    public bool ShouldUpdate()
-    {
-        if (Time.time < _nextUpdate)
+        public TetrisUpdateStepController(TetrisStageConfig stageConfig)
         {
-            return false;
+            _stageConfig = stageConfig;
+            _nextUpdate = Time.time;
         }
-        _nextUpdate += _stageConfig.UpdateStepInterval;
-        return true;
-    }
 
-    public void Reset()
-    {
-        _nextUpdate = Time.time;
+        public bool ShouldUpdate()
+        {
+            if (Time.time < _nextUpdate)
+            {
+                return false;
+            }
+            _nextUpdate += _stageConfig.UpdateStepInterval;
+            return true;
+        }
+
+        public void Reset()
+        {
+            _nextUpdate = Time.time;
+        }
     }
 }

@@ -1,18 +1,21 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu]
-public class TetrisStageConfig : ScriptableObject
+namespace AlfredoMB.Tetris.Models
 {
-    public int BoardSizeX;
-    public int BoardSizeY;
+    [CreateAssetMenu]
+    public class TetrisStageConfig : ScriptableObject
+    {
+        public int BoardSizeX;
+        public int BoardSizeY;
 
-    public float UpdateStepInterval;
-    public int Gravity;
+        public float UpdateStepInterval;
+        public int Gravity;
 
-    public int LineConsumptionScoreValue;
-    public float InputHoldTime;
+        public int LineConsumptionScoreValue;
+        public float InputHoldTime;
 
-    public bool EnableBlocksWithoutNeighborsBelowToFall;
+        public bool EnableBlocksWithoutNeighborsBelowToFall;
 
-    public TetrisBlockGroup[] AvailableBlockGroups;
+        public TetrisBlockGroup[] AvailableBlockGroups;
+    }
 }

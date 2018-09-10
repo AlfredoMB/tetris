@@ -1,22 +1,27 @@
-﻿public class TetrisGravityController
+﻿using AlfredoMB.Tetris.Models;
+
+namespace AlfredoMB.Tetris.Controllers
 {
-    private TetrisStageConfig _stageConfig;
-    private TetrisBoardController _boardController;
-
-    public bool DidCurrentBlockGroupHitBottom { get; private set; }
-
-    public TetrisGravityController(TetrisStageConfig stageConfig, TetrisBoardController boardController)
+    public class TetrisGravityController
     {
-        _stageConfig = stageConfig;
-        _boardController = boardController;
-    }
+        private TetrisStageConfig _stageConfig;
+        private TetrisBoardController _boardController;
 
-    public void Update()
-    {
-        DidCurrentBlockGroupHitBottom = !_boardController.MoveCurrentBlockGroup(0, _stageConfig.Gravity);
-        if (DidCurrentBlockGroupHitBottom)
+        public bool DidCurrentBlockGroupHitBottom { get; private set; }
+
+        public TetrisGravityController(TetrisStageConfig stageConfig, TetrisBoardController boardController)
         {
-            _boardController.SetCurrentBlockGroup(null);
+            _stageConfig = stageConfig;
+            _boardController = boardController;
+        }
+
+        public void Update()
+        {
+            DidCurrentBlockGroupHitBottom = !_boardController.MoveCurrentBlockGroup(0, _stageConfig.Gravity);
+            if (DidCurrentBlockGroupHitBottom)
+            {
+                _boardController.SetCurrentBlockGroup(null);
+            }
         }
     }
 }

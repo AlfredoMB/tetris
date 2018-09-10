@@ -1,22 +1,27 @@
-﻿public class TetrisScoreController
+﻿using AlfredoMB.Tetris.Models;
+
+namespace AlfredoMB.Tetris.Controllers
 {
-    private readonly TetrisStageConfig _stageConfig;
-    private readonly TetrisScore _score;
-
-    public TetrisScoreController(TetrisStageConfig stageConfig, TetrisScore score)
+    public class TetrisScoreController
     {
-        _stageConfig = stageConfig;
-        _score = score;
-    }
+        private readonly TetrisStageConfig _stageConfig;
+        private readonly TetrisScore _score;
 
-    public void AddLinesConsumed(int linesConsumed)
-    {
-        _score.TotalLinesConsumed += linesConsumed;
-        _score.Score = _score.TotalLinesConsumed * _stageConfig.LineConsumptionScoreValue;
-    }
+        public TetrisScoreController(TetrisStageConfig stageConfig, TetrisScore score)
+        {
+            _stageConfig = stageConfig;
+            _score = score;
+        }
 
-    public void Reset()
-    {
-        _score.Reset();
+        public void AddLinesConsumed(int linesConsumed)
+        {
+            _score.TotalLinesConsumed += linesConsumed;
+            _score.Score = _score.TotalLinesConsumed * _stageConfig.LineConsumptionScoreValue;
+        }
+
+        public void Reset()
+        {
+            _score.Reset();
+        }
     }
 }

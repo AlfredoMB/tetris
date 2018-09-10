@@ -1,22 +1,25 @@
 ﻿using UnityEngine;
 
-public class OnGUIScoreView : AbstractView
+namespace AlfredoMB.Tetris.Views
 {
-    private GUIStyle _style;
-    private Rect _rect;
-
-    private void Awake()
+    public class OnGUIScoreView : AbstractView
     {
-        _rect = new Rect(100, 0, 100, 100);
-    }
+        private GUIStyle _style;
+        private Rect _rect;
 
-    private void OnGUI()
-    {
-        if (GameController.Score == null)
+        private void Awake()
         {
-            return;
+            _rect = new Rect(100, 0, 100, 100);
         }
 
-        GUI.Label(_rect, "Score: " + GameController.Score.ToString());
+        private void OnGUI()
+        {
+            if (GameController.Score == null)
+            {
+                return;
+            }
+
+            GUI.Label(_rect, "Score: " + GameController.Score.ToString());
+        }
     }
 }
